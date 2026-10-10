@@ -1,0 +1,17 @@
+[global]
+developmentMode = false
+
+[theme]
+base = "light"
+primaryColor = "#6554D9"
+backgroundColor = "#F7F8FC"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#20263B"
+font = "sans serif"
+
+[server]
+headless = true
+fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false

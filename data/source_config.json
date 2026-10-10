@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "seed": 20260928,
+  "sku_id": "SKU-001",
+  "history": {
+    "start_date": "2026-02-01",
+    "days": 210
+  },
+  "simulation": {
+    "horizon_days": 30
+  },
+  "network": {
+    "nodes": [
+      {"id": "S01", "type": "supplier", "upstream_id": null},
+      {"id": "R01", "type": "regional_warehouse", "upstream_id": "S01"},
+      {"id": "R02", "type": "regional_warehouse", "upstream_id": "S01"},
+      {"id": "C01", "type": "city_warehouse", "upstream_id": "R01"},
+      {"id": "C02", "type": "city_warehouse", "upstream_id": "R01"},
+      {"id": "C03", "type": "city_warehouse", "upstream_id": "R02"},
+      {"id": "C04", "type": "city_warehouse", "upstream_id": "R02"},
+      {"id": "T01", "type": "terminal", "upstream_id": "C01", "base_daily_demand_units": 24},
+      {"id": "T02", "type": "terminal", "upstream_id": "C01", "base_daily_demand_units": 29},
+      {"id": "T03", "type": "terminal", "upstream_id": "C02", "base_daily_demand_units": 31},
+      {"id": "T04", "type": "terminal", "upstream_id": "C02", "base_daily_demand_units": 27},
+      {"id": "T05", "type": "terminal", "upstream_id": "C03", "base_daily_demand_units": 34},
+      {"id": "T06", "type": "terminal", "upstream_id": "C03", "base_daily_demand_units": 38},
+      {"id": "T07", "type": "terminal", "upstream_id": "C04", "base_daily_demand_units": 26},
+      {"id": "T08", "type": "terminal", "upstream_id": "C04", "base_daily_demand_units": 42}
+    ],
+    "tier_parameters": {
+      "supplier": {"initial_cover_days": 5.0, "capacity_cover_days": 13.0, "handling_capacity_multiplier": 1.8, "production_capacity_multiplier": 1.35},
+      "regional_warehouse": {"initial_cover_days": 5.0, "capacity_cover_days": 10.0, "handling_capacity_multiplier": 1.7},
+      "city_warehouse": {"initial_cover_days": 4.0, "capacity_cover_days": 8.0, "handling_capacity_multiplier": 1.8},
+      "terminal": {"initial_cover_days": 3.0, "capacity_cover_days": 7.0, "handling_capacity_multiplier": 2.0}
+    },
+    "transport_by_tier": {
+      "supplier_to_regional_warehouse": {"lead_time_days": 3, "capacity_multiplier": 1.7, "minimum_order_units": 20, "order_multiple_units": 10},
+      "regional_warehouse_to_city_warehouse": {"lead_time_days": 2, "capacity_multiplier": 1.8, "minimum_order_units": 10, "order_multiple_units": 5},
+      "city_warehouse_to_terminal": {"lead_time_days": 1, "capacity_multiplier": 2.0, "minimum_order_units": 5, "order_multiple_units": 1}
+    }
+  },
+  "demand": {
+    "daily_trend_rate": 0.00042,
+    "weekday_multipliers_monday_first": [0.91, 0.94, 0.97, 1.00, 1.06, 1.18, 1.12],
+    "annual_amplitude": 0.09,
+    "annual_peak_day_of_year": 250,
+    "global_shock": {"ar_phi": 0.65, "stationary_sigma": 0.04},
+    "regional_shock": {"ar_phi": 0.50, "stationary_sigma": 0.045},
+    "terminal_shock": {"ar_phi": 0.35, "stationary_sigma": 0.06},
+    "promotions": [
+      {"id": "spring_all", "start_date": "2026-03-12", "end_date": "2026-03-16", "terminal_ids": "all", "lift": 0.22},
+      {"id": "summer_mid", "start_date": "2026-06-06", "end_date": "2026-06-10", "terminal_ids": ["T03", "T04", "T05", "T06"], "lift": 0.28},
+      {"id": "summer_local", "start_date": "2026-07-25", "end_date": "2026-07-27", "terminal_ids": ["T07", "T08"], "lift": 0.30},
+      {"id": "autumn_all", "start_date": "2026-09-10", "end_date": "2026-09-14", "terminal_ids": "all", "lift": 0.25}
+    ]
+  },
+  "costs": {
+    "currency": "CNY",
+    "external_procurement_cost_per_unit": 18.0,
+    "terminal_lost_sale_penalty_per_unit": 24.0,
+    "holding_cost_per_unit_per_day_by_type": {
+      "supplier": 0.07,
+      "regional_warehouse": 0.10,
+      "city_warehouse": 0.15,
+      "terminal": 0.23
+    },
+    "transport_variable_cost_per_unit_by_tier": {
+      "supplier_to_regional_warehouse": 0.90,
+      "regional_warehouse_to_city_warehouse": 0.55,
+      "city_warehouse_to_terminal": 0.30
+    },
+    "transport_fixed_cost_per_dispatch_by_tier": {
+      "supplier_to_regional_warehouse": 18.0,
+      "regional_warehouse_to_city_warehouse": 12.0,
+      "city_warehouse_to_terminal": 6.0
+    },
+    "order_fixed_cost_per_order_by_tier": {
+      "supplier_to_regional_warehouse": 4.0,
+      "regional_warehouse_to_city_warehouse": 3.0,
+      "city_warehouse_to_terminal": 2.0
+    }
+  },
+  "scenarios": [
+    {"id": "baseline", "description": "Known promotions and ordinary stochastic demand only.", "demand_events": [], "transport_delay_events": [], "supply_limit_events": []},
+    {"id": "demand_surge", "description": "Unannounced demand increase in the eastern branch.", "demand_events": [{"start_day": 8, "end_day": 14, "terminal_ids": ["T05", "T06", "T07", "T08"], "multiplier": 1.55}], "transport_delay_events": [], "supply_limit_events": []},
+    {"id": "demand_decline", "description": "Unannounced demand contraction in the western branch.", "demand_events": [{"start_day": 8, "end_day": 18, "terminal_ids": ["T01", "T02", "T03", "T04"], "multiplier": 0.60}], "transport_delay_events": [], "supply_limit_events": []},
+    {"id": "transport_delay", "description": "Regional-to-city transport disruption.", "demand_events": [], "transport_delay_events": [{"start_day": 7, "end_day": 16, "from_node": "R02", "to_node": "C04", "extra_lead_time_days": 2}], "supply_limit_events": []},
+    {"id": "supply_limit", "description": "Temporary supplier production restriction.", "demand_events": [], "transport_delay_events": [], "supply_limit_events": [{"start_day": 8, "end_day": 18, "supplier_id": "S01", "capacity_multiplier": 0.55}]},
+    {"id": "combined_stress", "description": "Moderate demand surge, transport delay and supply restriction together.", "demand_events": [{"start_day": 9, "end_day": 15, "terminal_ids": ["T05", "T06", "T07", "T08"], "multiplier": 1.35}], "transport_delay_events": [{"start_day": 9, "end_day": 17, "from_node": "R02", "to_node": "C04", "extra_lead_time_days": 2}], "supply_limit_events": [{"start_day": 10, "end_day": 18, "supplier_id": "S01", "capacity_multiplier": 0.75}]}
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "accounting_rules": {
+    "external_procurement": "Charge once when units enter the supplier from an external source; never on internal transfers.",
+    "holding": "Charge closing on-hand units at every node once per day.",
+    "orders": "Charge fixed order cost only for actual positive replenishment orders.",
+    "shortage": "Charge only unfulfilled terminal consumer demand as lost sales; upstream unfilled requests are not additional lost sales.",
+    "transport": "Charge variable cost per dispatched unit and fixed cost per actual dispatch."
+  },
+  "costs": {
+    "currency": "CNY",
+    "external_procurement_cost_per_unit": 18.0,
+    "holding_cost_per_unit_per_day_by_type": {
+      "city_warehouse": 0.15,
+      "regional_warehouse": 0.1,
+      "supplier": 0.07,
+      "terminal": 0.23
+    },
+    "order_fixed_cost_per_order_by_tier": {
+      "city_warehouse_to_terminal": 2.0,
+      "regional_warehouse_to_city_warehouse": 3.0,
+      "supplier_to_regional_warehouse": 4.0
+    },
+    "terminal_lost_sale_penalty_per_unit": 24.0,
+    "transport_fixed_cost_per_dispatch_by_tier": {
+      "city_warehouse_to_terminal": 6.0,
+      "regional_warehouse_to_city_warehouse": 12.0,
+      "supplier_to_regional_warehouse": 18.0
+    },
+    "transport_variable_cost_per_unit_by_tier": {
+      "city_warehouse_to_terminal": 0.3,
+      "regional_warehouse_to_city_warehouse": 0.55,
+      "supplier_to_regional_warehouse": 0.9
+    }
+  },
+  "schema_version": "1.0",
+  "sku_id": "SKU-001"
+}

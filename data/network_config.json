@@ -1,0 +1,145 @@
+{
+  "edges": [
+    {
+      "base_lead_time_days": 1,
+      "edge_tier": "city_warehouse_to_terminal",
+      "from_node": "C01",
+      "minimum_order_units": 5,
+      "order_multiple_units": 1,
+      "to_node": "T01",
+      "transport_capacity_units_per_day": 48
+    },
+    {
+      "base_lead_time_days": 1,
+      "edge_tier": "city_warehouse_to_terminal",
+      "from_node": "C01",
+      "minimum_order_units": 5,
+      "order_multiple_units": 1,
+      "to_node": "T02",
+      "transport_capacity_units_per_day": 58
+    },
+    {
+      "base_lead_time_days": 1,
+      "edge_tier": "city_warehouse_to_terminal",
+      "from_node": "C02",
+      "minimum_order_units": 5,
+      "order_multiple_units": 1,
+      "to_node": "T03",
+      "transport_capacity_units_per_day": 62
+    },
+    {
+      "base_lead_time_days": 1,
+      "edge_tier": "city_warehouse_to_terminal",
+      "from_node": "C02",
+      "minimum_order_units": 5,
+      "order_multiple_units": 1,
+      "to_node": "T04",
+      "transport_capacity_units_per_day": 54
+    },
+    {
+      "base_lead_time_days": 1,
+      "edge_tier": "city_warehouse_to_terminal",
+      "from_node": "C03",
+      "minimum_order_units": 5,
+      "order_multiple_units": 1,
+      "to_node": "T05",
+      "transport_capacity_units_per_day": 68
+    },
+    {
+      "base_lead_time_days": 1,
+      "edge_tier": "city_warehouse_to_terminal",
+      "from_node": "C03",
+      "minimum_order_units": 5,
+      "order_multiple_units": 1,
+      "to_node": "T06",
+      "transport_capacity_units_per_day": 76
+    },
+    {
+      "base_lead_time_days": 1,
+      "edge_tier": "city_warehouse_to_terminal",
+      "from_node": "C04",
+      "minimum_order_units": 5,
+      "order_multiple_units": 1,
+      "to_node": "T07",
+      "transport_capacity_units_per_day": 52
+    },
+    {
+      "base_lead_time_days": 1,
+      "edge_tier": "city_warehouse_to_terminal",
+      "from_node": "C04",
+      "minimum_order_units": 5,
+      "order_multiple_units": 1,
+      "to_node": "T08",
+      "transport_capacity_units_per_day": 84
+    },
+    {
+      "base_lead_time_days": 2,
+      "edge_tier": "regional_warehouse_to_city_warehouse",
+      "from_node": "R01",
+      "minimum_order_units": 10,
+      "order_multiple_units": 5,
+      "to_node": "C01",
+      "transport_capacity_units_per_day": 96
+    },
+    {
+      "base_lead_time_days": 2,
+      "edge_tier": "regional_warehouse_to_city_warehouse",
+      "from_node": "R01",
+      "minimum_order_units": 10,
+      "order_multiple_units": 5,
+      "to_node": "C02",
+      "transport_capacity_units_per_day": 105
+    },
+    {
+      "base_lead_time_days": 2,
+      "edge_tier": "regional_warehouse_to_city_warehouse",
+      "from_node": "R02",
+      "minimum_order_units": 10,
+      "order_multiple_units": 5,
+      "to_node": "C03",
+      "transport_capacity_units_per_day": 130
+    },
+    {
+      "base_lead_time_days": 2,
+      "edge_tier": "regional_warehouse_to_city_warehouse",
+      "from_node": "R02",
+      "minimum_order_units": 10,
+      "order_multiple_units": 5,
+      "to_node": "C04",
+      "transport_capacity_units_per_day": 123
+    },
+    {
+      "base_lead_time_days": 3,
+      "edge_tier": "supplier_to_regional_warehouse",
+      "from_node": "S01",
+      "minimum_order_units": 20,
+      "order_multiple_units": 10,
+      "to_node": "R01",
+      "transport_capacity_units_per_day": 189
+    },
+    {
+      "base_lead_time_days": 3,
+      "edge_tier": "supplier_to_regional_warehouse",
+      "from_node": "S01",
+      "minimum_order_units": 20,
+      "order_multiple_units": 10,
+      "to_node": "R02",
+      "transport_capacity_units_per_day": 238
+    }
+  ],
+  "schema_version": "1.0",
+  "sku_id": "SKU-001",
+  "supplier_production_capacity_units_per_day": {
+    "S01": 339
+  },
+  "timing_convention": {
+    "arrival_rule": "A dispatch on day d with lead_time_days L arrives at the beginning of day d+L; L >= 1.",
+    "day_order": [
+      "receive_due_shipments",
+      "place_orders_and_dispatch_using_prior_demand",
+      "realize_terminal_demand",
+      "close_inventory_and_costs"
+    ],
+    "delay_event_basis": "Transport delay events apply by dispatch day and add extra_lead_time_days."
+  }
+}

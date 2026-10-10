@@ -1,0 +1,16 @@
+node_id,node_type,tier,upstream_node_id,downstream_node_ids,sku_id,nominal_daily_flow_units,initial_on_hand_units,storage_capacity_units,daily_processing_capacity_units,daily_production_capacity_units
+S01,supplier,0,,R01|R02,SKU-001,251,1238,3263,452,339
+R01,regional_warehouse,1,S01,C01|C02,SKU-001,111,576,1110,189,0
+R02,regional_warehouse,1,S01,C03|C04,SKU-001,140,724,1400,238,0
+C01,city_warehouse,2,R01,T01|T02,SKU-001,53,212,424,96,0
+C02,city_warehouse,2,R01,T03|T04,SKU-001,58,229,464,105,0
+C03,city_warehouse,2,R02,T05|T06,SKU-001,72,284,576,130,0
+C04,city_warehouse,2,R02,T07|T08,SKU-001,68,273,544,123,0
+T01,terminal,3,C01,,SKU-001,24,75,168,48,0
+T02,terminal,3,C01,,SKU-001,29,86,203,58,0
+T03,terminal,3,C02,,SKU-001,31,96,217,62,0
+T04,terminal,3,C02,,SKU-001,27,81,189,54,0
+T05,terminal,3,C03,,SKU-001,34,104,238,68,0
+T06,terminal,3,C03,,SKU-001,38,110,266,76,0
+T07,terminal,3,C04,,SKU-001,26,79,182,52,0
+T08,terminal,3,C04,,SKU-001,42,126,294,84,0

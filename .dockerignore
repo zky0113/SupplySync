@@ -1,0 +1,11 @@
+.git/
+.runtime/
+.venv/
+__pycache__/
+*.pyc
+logs/
+tests/
+*.zip
+.env
+.env.*
+.streamlit/secrets.toml

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 154" role="img" aria-label="供应商、区域仓、城市仓到终端的四级供应链路径">
+  <defs>
+    <linearGradient id="route-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#AEE9FF"/>
+      <stop offset="1" stop-color="#E1D5FF"/>
+    </linearGradient>
+    <marker id="route-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <path d="M0 0L7 3.5L0 7" fill="none" stroke="#D6E8FF" stroke-width="1.4"/>
+    </marker>
+  </defs>
+  <g opacity=".20" fill="#DDE9FF">
+    <circle cx="26" cy="17" r="2"/><circle cx="118" cy="25" r="2"/><circle cx="340" cy="19" r="2"/>
+    <circle cx="440" cy="31" r="2"/><circle cx="224" cy="134" r="2"/><circle cx="387" cy="130" r="2"/>
+  </g>
+  <path d="M79 66H139 M199 66H259 M319 66H379" fill="none" stroke="url(#route-line)" stroke-width="2.5" stroke-linecap="round" marker-end="url(#route-arrow)"/>
+  <g fill="#FFFFFF" fill-opacity=".13" stroke="#D8E9FF" stroke-opacity=".86" stroke-width="1.5">
+    <circle cx="48" cy="66" r="30"/><circle cx="168" cy="66" r="30"/>
+    <circle cx="288" cy="66" r="30"/><circle cx="408" cy="66" r="30"/>
+  </g>
+  <g fill="#FFFFFF" font-family="Microsoft YaHei, PingFang SC, sans-serif" text-anchor="middle">
+    <text x="48" y="75" font-size="23" font-weight="700">供</text>
+    <text x="168" y="75" font-size="23" font-weight="700">区</text>
+    <text x="288" y="75" font-size="23" font-weight="700">城</text>
+    <text x="408" y="75" font-size="23" font-weight="700">端</text>
+  </g>
+  <g fill="#E7EDFF" font-family="Microsoft YaHei, PingFang SC, sans-serif" text-anchor="middle" font-size="13">
+    <text x="48" y="121">供应商</text><text x="168" y="121">区域仓</text>
+    <text x="288" y="121">城市仓</text><text x="408" y="121">终端</text>
+  </g>
+</svg>
