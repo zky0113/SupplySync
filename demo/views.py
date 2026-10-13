@@ -193,9 +193,9 @@ def simulation_view(bundle: Bundle, scenario_id: str, selected: str):
         cards[1].metric("S2 总成本", f"¥{right['total_cost']:,.0f}")
         diff = right['total_cost'] - left['total_cost']
         if diff < 0:
-            cards[1].markdown(":green[下降]")
+            cards[1].markdown(f":green[下降 {abs(diff):,.0f}]")
         elif diff > 0:
-            cards[1].markdown(":red[上升]")
+            cards[1].markdown(f":red[上升 {diff:,.0f}]")
         cards[2].metric("终端缺货率 S1 → S2", f"{left['stockout_rate']:.2%} → {right['stockout_rate']:.2%}")
         cards[3].metric("周转次数 S1 → S2", f"{left['inventory_turnover']:.2f} → {right['inventory_turnover']:.2f}")
         if right["total_cost"] > left["total_cost"]:
