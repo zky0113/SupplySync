@@ -190,8 +190,12 @@ def simulation_view(bundle: Bundle, scenario_id: str, selected: str):
         left, right = experiment["S1"]["metrics"], experiment["S2"]["metrics"]
         cards = st.columns(4)
         cards[0].metric("S1 总成本", f"¥{left['total_cost']:,.0f}")
-        cards[1].metric("S2 总成本", f"¥{right['total_cost']:,.0f}",
-                        delta=f"{right['total_cost']-left['total_cost']:,.0f}", delta_color="inverse")
+        cards[1].metric("S2 总成本", f"¥{right['total_cost']:,.0f}")
+        diff = right['total_cost'] - left['total_cost']
+        if diff < 0:
+            cards[1].markdown(":green[下降]")
+        elif diff > 0:
+            cards[1].markdown(":red[上升]")
         cards[2].metric("终端缺货率 S1 → S2", f"{left['stockout_rate']:.2%} → {right['stockout_rate']:.2%}")
         cards[3].metric("周转次数 S1 → S2", f"{left['inventory_turnover']:.2f} → {right['inventory_turnover']:.2f}")
         if right["total_cost"] > left["total_cost"]:
