@@ -191,7 +191,7 @@ def simulation_view(bundle: Bundle, scenario_id: str, selected: str):
         cards = st.columns(4)
         cards[0].metric("S1 总成本", f"¥{left['total_cost']:,.0f}")
         cards[1].metric("S2 总成本", f"¥{right['total_cost']:,.0f}",
-                        delta=f"¥{right['total_cost']-left['total_cost']:,.0f}", delta_color="inverse")
+                        delta=f"{right['total_cost']-left['total_cost']:,.0f}", delta_color="inverse")
         cards[2].metric("终端缺货率 S1 → S2", f"{left['stockout_rate']:.2%} → {right['stockout_rate']:.2%}")
         cards[3].metric("周转次数 S1 → S2", f"{left['inventory_turnover']:.2f} → {right['inventory_turnover']:.2f}")
         if right["total_cost"] > left["total_cost"]:
@@ -281,6 +281,7 @@ def agent_view(bundle: Bundle, selected: str, scenario_id: str):
                           if mode.startswith("DeepSeek") else evidence_answer(ctx, question, selected, scenario_id))
             st.session_state["agent_response"] = {**answer, "node_id": selected, "scenario_id": scenario_id}
         except Exception as error:
+            st.session_state.pop("agent_response", None)
             st.error(f"分析未完成：{error}")
     answer = st.session_state.get("agent_response")
     if answer and (answer["node_id"], answer["scenario_id"]) != (selected, scenario_id):

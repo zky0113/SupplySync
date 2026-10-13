@@ -133,27 +133,41 @@ def live_answer(ctx, question: str, node_id: str, scenario_id: str, api_key: str
         raise ValueError("未配置 DEEPSEEK_API_KEY。")
     messages = [{"role": "system", "content":
         "你是供应链分析助手。只可依赖业务工具返回的数值。必须先调用工具；"
+        "工具返回 error 代表失败，不能作为业务证据；未成功获取的数据不得推断数值或结论。"
         "不可编造预测、成本、改善率或因果结论。首日订单是请求量，不是到货量。"
         "仿真是合成数据，不可表述为企业实际收益。可说明不确定性，简洁回答中文。"},
         {"role": "user", "content": f"当前节点={node_id}；场景={scenario_id}。问题：{question[:1500]}"}]
     trace = []
     for _ in range(4):
         message = _deepseek_chat(api_key, messages)
-        calls = message.get("tool_calls") or []
+        if not isinstance(message, dict):
+            raise RuntimeError("模型返回无效消息。")
+        calls = message.get("tool_calls")
+        if calls is None:
+            calls = []
+        if not isinstance(calls, list):
+            raise RuntimeError("模型返回无效工具调用列表。")
         if not calls:
             if not trace:
                 raise RuntimeError("模型未调用业务工具；拒绝无证据回答。")
-            answer = message.get("content") or ""
-            if not answer.strip():
+            if not any(item["success"] for item in trace):
+                raise RuntimeError("业务工具均调用失败；拒绝无证据回答。")
+            answer = message.get("content")
+            if not isinstance(answer, str) or not answer.strip():
                 raise RuntimeError("模型未给出可展示答案。")
+            comparison = next((item["result"] for item in reversed(trace)
+                               if item["tool"] == "compare_strategies" and item["success"]), None)
             return {"mode": "DeepSeek 工具调用", "answer": answer, "trace": trace,
-                    "run_id": next((item["result"]["run_id"] for item in trace
-                                    if item["tool"] == "compare_strategies"), None)}
+                    "run_id": comparison.get("run_id") if comparison else None}
         if len(trace) + len(calls) > 8:
             raise RuntimeError("工具调用超过安全上限。")
+        for call in calls:
+            if (not isinstance(call, dict) or not isinstance(call.get("id"), str)
+                    or not call["id"].strip() or not isinstance(call.get("function"), dict)):
+                raise RuntimeError("模型返回无效工具调用。")
         messages.append({"role": "assistant", "content": message.get("content"), "tool_calls": calls})
         for call in calls:
-            name = call.get("function", {}).get("name")
+            name = call["function"].get("name")
             if name not in TOOL_NAMES:
                 raise RuntimeError("模型请求未授权工具。")
             args = {}
@@ -166,10 +180,13 @@ def live_answer(ctx, question: str, node_id: str, scenario_id: str, api_key: str
                     "scenario_id" in args and args["scenario_id"] != scenario_id):
                     raise ValueError("工具参数超出当前选定范围")
                 result = execute_tool(ctx, name, args)
-            except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+                if not isinstance(result, dict) or not result:
+                    raise ValueError("业务工具返回无效结果")
+            except (KeyError, TypeError, ValueError, RuntimeError, json.JSONDecodeError) as error:
                 result = {"error": str(error)}
+            success = "error" not in result
             trace.append({"tool": name, "arguments": args if isinstance(args, dict) else {},
-                          "result": result})
+                          "result": result, "success": success})
             messages.append({"role": "tool", "tool_call_id": call["id"],
                              "content": json.dumps(result, ensure_ascii=False, default=str)})
     raise RuntimeError("模型工具调用轮数超过上限，已停止。")
